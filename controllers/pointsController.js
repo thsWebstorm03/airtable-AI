@@ -453,8 +453,8 @@ const getPoints = async(req, res) => {
          const pointsLog1 = {
             'Link to Diagnostic ID': dailyData[0]['Link to Diagnostic_ID'],
             "Tongue Top 4 conditions": "",
-            "Recommendation - Top 1 Condition": [mapConditionNames1[top2Entries[0][0]]],
-            "Recommendation - Top 2": [mapConditionNames1[top2Entries[1][0]]],
+            "Recommendation - Top 1 Condition": [top2Entries[0][0]],
+            "Recommendation - Top 2": [top2Entries[1][0]],
             ...newTotalPoints
          };
 
