@@ -56,14 +56,21 @@ const getDataByViewFields = async(base, table_name, view_name, fields) => {
 }
 
 // ============================ Get the table data by filtering =====================================
-const getFilteredData = async(base, table_name, view_name, fields, customerId) => {
+const getFilteredData = async(base, table_name, view_name, fields, sort, customerId) => {
    const allRecords = [];
    try {
       await base(table_name)
-         .select({view: view_name, fields: fields, filterByFormula: `{Customer ID} = '${customerId}'`,})
+         .select({
+            view: view_name, 
+            fields: fields, 
+            sort: sort,
+         })
          .eachPage((records, fetchNextPage) => {
             records.forEach(function (record) {
-               if (record.get('Customer ID') == customerId) allRecords.push(record);
+               if (record.get('Link to Diagnostic_ID') == customerId) {
+                  console.log(record, 'record');
+                  allRecords.push(record);
+               }
             });
             fetchNextPage();
          });

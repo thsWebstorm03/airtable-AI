@@ -9,7 +9,8 @@ const {
    getDataByViewFields,
    createNotification,
    getSortedDataByViewName,
-   createPointsLog
+   createPointsLog,
+   getFilteredData
 } = require('../helper/common');
 
 const gutify_base = Airtable.base(GUTIFYBASE_ID);
@@ -250,13 +251,17 @@ const makeNotication = (input) => {
 }
 
 const getPoints = async(req, res) => {
-   
+   const {DiagnosticID} = req.query;
+   console.log(DiagnosticID, 'DiagnosticID');
    // ==========================get top 4 tongue conditions================================
    // const task1_top4 = await getTop4TongueConditions();
 
    // =================== Get records using getDataByViewFields function ================================================
    const parameterViewRecords = await getDataByViewFields(gutify_base, PARAMETER_TABLE, PARAMETER_VIEW, PARAMETER_FIELDS);
    const dailyViewRecords = await getSortedDataByViewName(gutify_base, DAILYTRACKER_TABLE, DAILYTRACKER_VIEW, DAILYTRACKER_FIELDS, DAILYTRACKER_SORT);
+   
+   // const dailyViewRecords = await getFilteredData(gutify_base, DAILYTRACKER_TABLE, DAILYTRACKER_VIEW, DAILYTRACKER_FIELDS, DAILYTRACKER_SORT, DiagnosticID);
+
    const conditionViewRecords = await getDataByViewFields(gutify_base, CONDITIONS_TABLE, CONDITIONS_VIEW, CONDITIONS_FIELDS);
 
    conditionViewRecords.forEach(record => {
