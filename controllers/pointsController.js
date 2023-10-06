@@ -173,6 +173,7 @@ const TotalPoints = {
 
 var mapParameters = {};                // Object for storing all parameters from the PARAMETER_TABLE.
 var mapConditionNames = {};            // Object for storing all Conditions from the CONDITION_TABLE.
+var mapConditionNames1 = {};            // Object for storing all Conditions from the CONDITION_TABLE.
 var MinNumberOfRecentDays = 3;         // initial value of "Min number of recent days that should have been tracked consecutively"
 var MinNumberOfNeedDays = 7            // initial value of "Min number of days that need to have been tracked in the number of daily tracker days we look at"
 var NumberOfDailyTrackerDays = 10;     // initial value of "Number of daily tracker days we look at"
@@ -266,6 +267,7 @@ const getPoints = async(req, res) => {
 
    conditionViewRecords.forEach(record => {
       mapConditionNames[record.fields['Condition Name']] = record.id;
+      mapConditionNames1[record.id] = record.fields['Condition Name'];
    });
 
    if (dailyViewRecords.length > 0){
@@ -448,11 +450,19 @@ const getPoints = async(req, res) => {
             ...newTotalPoints
          };
 
+         const pointsLog1 = {
+            'Link to Diagnostic ID': dailyData[0]['Link to Diagnostic_ID'],
+            "Tongue Top 4 conditions": "",
+            "Recommendation - Top 1 Condition": [mapConditionNames1[top2Entries[0][0]]],
+            "Recommendation - Top 2": [mapConditionNames1[top2Entries[1][0]]],
+            ...newTotalPoints
+         };
+
          console.log(pointsLog, 'pointLog');
          console.log(top2Entries, 'Recommendation');
          createPointsLog(gutify_base, 'Points from past Daily Trackers for Alogo #3', JSON.parse(JSON.stringify(pointsLog)));
 
-         return res.status(200).json(pointsLog);
+         return res.status(200).json(JSON.stringify(pointsLog1));
       } 
 
    }
