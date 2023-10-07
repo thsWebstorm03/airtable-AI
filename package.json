@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Didou55/Airtable-AI3-Backend.git"
-
+    "url": "git+https://github.com/thsWebstorm03/airtable-AI.git"
+    
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Didou55/Airtable-AI3-Backend.git"
+    "url": "https://github.com/thsWebstorm03/airtable-AI/issues"
   },
   "homepage": "https://github.com/thsWebstorm03/airtable-AI#readme",
   "dependencies": {
