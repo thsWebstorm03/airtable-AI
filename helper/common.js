@@ -41,6 +41,7 @@ const getFilteredData = async(base, table_name, view_name, fields, sort, custome
    let allRecords = [];
    try {
       allRecords = await base(table_name).select({fields: fields,sort: sort, filterByFormula: `SEARCH('${customerId}', {Link to Diagnostic_ID})`}).all();
+      console.log(allRecords.length, 'allRecords.length');
       return allRecords;
    } catch (err) {
       console.error(err);

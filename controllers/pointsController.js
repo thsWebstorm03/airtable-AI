@@ -460,7 +460,7 @@ const getPoints = async(req, res) => {
          console.log(top2Entries, 'Recommendation');
          createPointsLog(gutify_base, 'Points from past Daily Trackers for Alogo #3', JSON.parse(JSON.stringify(pointsLog)));
 
-         return res.json({...pointsLog1});
+         return res.json(pointsLog1);
       } 
 
    }
