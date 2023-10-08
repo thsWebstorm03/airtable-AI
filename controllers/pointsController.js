@@ -441,15 +441,7 @@ const getPoints = async(req, res) => {
             return acc;
          }, {});
 
-         // const pointsLog = {
-         //    'Link to Diagnostic ID': dailyData[0]['Link to Diagnostic_ID'],
-         //    "Tongue Top 4 conditions": String(task1_top4),
-         //    "Recommendation - Top 1 Condition": [mapConditionNames[top2Entries[0][0]]],
-         //    "Recommendation - Top 2": [mapConditionNames[top2Entries[1][0]]],
-         //    ...newTotalPoints
-         // };
-
-         const pointsLog1 = {
+         const pointsLog = {
             'Link to Diagnostic ID': dailyData[0]['Link to Diagnostic_ID'],
             "Tongue Top 4 conditions": String(task1_top4),
             "Recommendation - Top 1 Condition": [mapConditionNames[top2Entries[0][0]]],
@@ -457,8 +449,16 @@ const getPoints = async(req, res) => {
             ...newTotalPoints
          };
 
+         const pointsLog1 = {
+            'Link to Diagnostic ID': dailyData[0]['Link to Diagnostic_ID'],
+            "Tongue Top 4 conditions": String(task1_top4),
+            "Recommendation - Top 1 Condition": [top2Entries[0][0]],
+            "Recommendation - Top 2": [top2Entries[1][0]],
+            ...newTotalPoints
+         };
+
          console.log(top2Entries, 'Recommendation');
-         createPointsLog(gutify_base, 'Points from past Daily Trackers for Alogo #3', JSON.parse(JSON.stringify(pointsLog1)));
+         createPointsLog(gutify_base, 'Points from past Daily Trackers for Alogo #3', JSON.parse(JSON.stringify(pointsLog)));
 
          return res.status(200).json(JSON.stringify(pointsLog1));
       } 
