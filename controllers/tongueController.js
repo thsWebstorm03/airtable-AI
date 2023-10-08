@@ -49,7 +49,7 @@ const mapParameters = {};
 var result = "";
 var final_obj = {};
 
-const getTop4TongueConditions = async(req, res) => {
+const getTop4TongueConditions = async() => {
 
    const parameterViewRecords = await getDataByViewFields(base, PARAMETER_TABLE, PARAMETER_VIEW, PARAMETER_FIELDS);
    const previousViewRecords = await getDataByViewFields(base, PREVIOUSLIST_TABLE, PREV_VIEW, PREV_FIELDS);
@@ -123,8 +123,8 @@ const getTop4TongueConditions = async(req, res) => {
       .slice(0,4)
       .map(([key, value]) => `${key}:${value}`)
       .join(', ')
-
-   return res.status(200).json(result);
+   // console.log(result, 'result');
+   return result;
    
 }
 

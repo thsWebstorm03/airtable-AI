@@ -13,6 +13,8 @@ const {
    getFilteredData
 } = require('../helper/common');
 
+const {getTop4TongueConditions} = require('./tongueController')
+
 const gutify_base = Airtable.base(GUTIFYBASE_ID);
 
 const PARAMETER_TABLE = 'Parameters for Algo #3';
@@ -172,8 +174,7 @@ const TotalPoints = {
 }
 
 var mapParameters = {};                // Object for storing all parameters from the PARAMETER_TABLE.
-var mapConditionNames = {};            // Object for storing all Conditions from the CONDITION_TABLE.
-var mapConditionNames1 = {};            // Object for storing all Conditions from the CONDITION_TABLE.
+// var mapConditionNames = {};            // Object for storing all Conditions from the CONDITION_TABLE.
 var MinNumberOfRecentDays = 3;         // initial value of "Min number of recent days that should have been tracked consecutively"
 var MinNumberOfNeedDays = 7            // initial value of "Min number of days that need to have been tracked in the number of daily tracker days we look at"
 var NumberOfDailyTrackerDays = 10;     // initial value of "Number of daily tracker days we look at"
@@ -255,20 +256,15 @@ const getPoints = async(req, res) => {
    const {DiagnosticID} = req.query;
    console.log(DiagnosticID, 'DiagnosticID');
    // ==========================get top 4 tongue conditions================================
-   // const task1_top4 = await getTop4TongueConditions();
-
+   const task1_top4 = await getTop4TongueConditions();
    // =================== Get records using getDataByViewFields function ================================================
    const parameterViewRecords = await getDataByViewFields(gutify_base, PARAMETER_TABLE, PARAMETER_VIEW, PARAMETER_FIELDS);
-   const dailyViewRecords = await getSortedDataByViewName(gutify_base, DAILYTRACKER_TABLE, DAILYTRACKER_VIEW, DAILYTRACKER_FIELDS, DAILYTRACKER_SORT);
-   
-   // const dailyViewRecords = await getFilteredData(gutify_base, DAILYTRACKER_TABLE, DAILYTRACKER_VIEW, DAILYTRACKER_FIELDS, DAILYTRACKER_SORT, DiagnosticID);
-
+   const dailyViewRecords = await getFilteredData(gutify_base, DAILYTRACKER_TABLE, DAILYTRACKER_VIEW, DAILYTRACKER_FIELDS, DAILYTRACKER_SORT, DiagnosticID);
    const conditionViewRecords = await getDataByViewFields(gutify_base, CONDITIONS_TABLE, CONDITIONS_VIEW, CONDITIONS_FIELDS);
 
-   conditionViewRecords.forEach(record => {
-      mapConditionNames[record.fields['Condition Name']] = record.id;
-      mapConditionNames1[record.id] = record.fields['Condition Name'];
-   });
+   // conditionViewRecords.forEach(record => {
+   //    mapConditionNames[record.fields['Condition Name']] = record.id;
+   // });
 
    if (dailyViewRecords.length > 0){
       // ================= Get the max number of days since last tongue(=7 days) from the PARAMETER_TABLE =================
@@ -307,6 +303,9 @@ const getPoints = async(req, res) => {
          // Check if the date exists in the 'Calendar date' field of any object in dailyData
          return dailyData.some(data => data['Calendar date'] === date);
       });
+
+      console.log(consecutiveDays, MinNumberOfRecentDays, 'consecutiveDays');
+      console.log(trackDates_10days,NumberOfABChangedDays, 'trackDates_10days');
 
       // ======================IF Condition1 or Condition2 Then Create a notification===============
       if (consecutiveDays < MinNumberOfRecentDays || trackDates_10days.length < MinNumberOfNeedDays) {
@@ -442,23 +441,23 @@ const getPoints = async(req, res) => {
             return acc;
          }, {});
 
-         const pointsLog = {
-            'Link to Diagnostic ID': dailyData[0]['Link to Diagnostic_ID'],
-            "Tongue Top 4 conditions": "",
-            "Recommendation - Top 1 Condition": [mapConditionNames[top2Entries[0][0]]],
-            "Recommendation - Top 2": [mapConditionNames[top2Entries[1][0]]],
-            ...newTotalPoints
-         };
+         // const pointsLog = {
+         //    'Link to Diagnostic ID': dailyData[0]['Link to Diagnostic_ID'],
+         //    "Tongue Top 4 conditions": String(task1_top4),
+         //    "Recommendation - Top 1 Condition": [mapConditionNames[top2Entries[0][0]]],
+         //    "Recommendation - Top 2": [mapConditionNames[top2Entries[1][0]]],
+         //    ...newTotalPoints
+         // };
 
          const pointsLog1 = {
             'Link to Diagnostic ID': dailyData[0]['Link to Diagnostic_ID'],
-            "Tongue Top 4 conditions": "",
+            "Tongue Top 4 conditions": String(task1_top4),
             "Recommendation - Top 1 Condition": [top2Entries[0][0]],
             "Recommendation - Top 2": [top2Entries[1][0]],
             ...newTotalPoints
          };
 
-         console.log(pointsLog, 'pointLog');
+         // console.log(pointsLog, 'pointLog');
          console.log(top2Entries, 'Recommendation');
          createPointsLog(gutify_base, 'Points from past Daily Trackers for Alogo #3', JSON.parse(JSON.stringify(pointsLog)));
 

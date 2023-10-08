@@ -13,9 +13,6 @@ const port = process.env.PORT || 5001;
 app.use(bodyParser.json(), urlencodeParser);
 app.use(cors());
 
-// const dbConn = require("./database/dbConn");
-// dbConn();
-
 app.use((req, res, next) => { //doesn't send response just adjusts it
     res.header("Access-Control-Allow-Origin", "*") //* to give access to any origin
     res.header(

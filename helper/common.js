@@ -2,14 +2,16 @@ const getDataByTableName = async(base, table_name) => {}
 
 // ============================== Get table data by view ============================================
 const getDataByViewName = async(base, table_name, view_name) => {
-   const allRecords = [];
+   let allRecords = [];
    try {
-      await base(table_name)
-         .select({view: view_name})
-         .eachPage(async(records, fetchNextPage) => {
-            allRecords.push(...records);
-            fetchNextPage();
-         });
+      // await base(table_name)
+      //    .select({view: view_name})
+      //    .eachPage(async(records, fetchNextPage) => {
+      //       allRecords.push(...records);
+      //       fetchNextPage();
+      //    });
+      // return allRecords;
+      allRecords = await base(table_name).select({view: view_name}).all();
       return allRecords;
    } catch (err) {
       console.error(err);
@@ -19,18 +21,20 @@ const getDataByViewName = async(base, table_name, view_name) => {
 
 // ============================== Get table data by view sorting them in a specific order ============================================
 const getSortedDataByViewName = async(base, table_name, view_name, fields, sort) => {
-   const allRecords = [];
+   let allRecords = [];
    try {
-      await base(table_name)
-         .select({
-            view: view_name, 
-            fields: fields,
-            sort: sort
-         })
-         .eachPage(async(records, fetchNextPage) => {
-            allRecords.push(...records);
-            fetchNextPage();
-         });
+      // await base(table_name)
+      //    .select({
+      //       view: view_name, 
+      //       fields: fields,
+      //       sort: sort
+      //    })
+      //    .eachPage(async(records, fetchNextPage) => {
+      //       allRecords.push(...records);
+      //       fetchNextPage();
+      //    });
+      // return allRecords;
+      allRecords = await base(table_name).select({fields: fields, view: view_name}).all();
       return allRecords;
    } catch (err) {
       console.error(err);
@@ -40,14 +44,16 @@ const getSortedDataByViewName = async(base, table_name, view_name, fields, sort)
 
 // =============================== Get table data by field names of the view ========================
 const getDataByViewFields = async(base, table_name, view_name, fields) => {
-   const allRecords = [];
+   let allRecords = [];
    try {
-      await base(table_name)
-         .select({view: view_name, fields: fields})
-         .eachPage((records, fetchNextPage) => {
-            allRecords.push(...records);
-            fetchNextPage();
-         });
+      // await base(table_name)
+      //    .select({view: view_name, fields: fields})
+      //    .eachPage((records, fetchNextPage) => {
+      //       allRecords.push(...records);
+      //       fetchNextPage();
+      //    });
+      // return allRecords;
+      allRecords = await base(table_name).select({fields: fields, view: view_name}).all();
       return allRecords;
    } catch (err) {
       console.error(err);
@@ -57,23 +63,26 @@ const getDataByViewFields = async(base, table_name, view_name, fields) => {
 
 // ============================ Get the table data by filtering =====================================
 const getFilteredData = async(base, table_name, view_name, fields, sort, customerId) => {
-   const allRecords = [];
+   let allRecords = [];
    try {
-      await base(table_name)
-         .select({
-            view: view_name, 
-            fields: fields, 
-            sort: sort,
-         })
-         .eachPage((records, fetchNextPage) => {
-            records.forEach(function (record) {
-               if (record.get('Link to Diagnostic_ID') == customerId) {
-                  console.log(record, 'record');
-                  allRecords.push(record);
-               }
-            });
-            fetchNextPage();
-         });
+      // await base(table_name)
+      //    .select({
+      //       view: view_name, 
+      //       fields: fields, 
+      //       sort: sort,
+      //    })
+      //    .eachPage((records, fetchNextPage) => {
+      //       records.forEach(function (record) {
+      //          if (record.get('Link to Diagnostic_ID') == customerId) {
+      //             console.log(record, 'record');
+      //             allRecords.push(record);
+      //          }
+      //       });
+      //       fetchNextPage();
+      //    });
+      // return allRecords;
+      allRecords = await base(table_name).select({fields: fields,sort: sort, filterByFormula: `SEARCH('${customerId}', {Link to Diagnostic_ID})`}).all();
+      // console.log(allRecords, 'allrecords')
       return allRecords;
    } catch (err) {
       console.error(err);
