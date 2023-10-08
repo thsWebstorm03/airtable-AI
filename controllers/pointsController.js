@@ -174,7 +174,7 @@ const TotalPoints = {
 }
 
 var mapParameters = {};                // Object for storing all parameters from the PARAMETER_TABLE.
-// var mapConditionNames = {};            // Object for storing all Conditions from the CONDITION_TABLE.
+var mapConditionNames = {};            // Object for storing all Conditions from the CONDITION_TABLE.
 var MinNumberOfRecentDays = 3;         // initial value of "Min number of recent days that should have been tracked consecutively"
 var MinNumberOfNeedDays = 7            // initial value of "Min number of days that need to have been tracked in the number of daily tracker days we look at"
 var NumberOfDailyTrackerDays = 10;     // initial value of "Number of daily tracker days we look at"
@@ -262,9 +262,9 @@ const getPoints = async(req, res) => {
    const dailyViewRecords = await getFilteredData(gutify_base, DAILYTRACKER_TABLE, DAILYTRACKER_VIEW, DAILYTRACKER_FIELDS, DAILYTRACKER_SORT, DiagnosticID);
    const conditionViewRecords = await getDataByViewFields(gutify_base, CONDITIONS_TABLE, CONDITIONS_VIEW, CONDITIONS_FIELDS);
 
-   // conditionViewRecords.forEach(record => {
-   //    mapConditionNames[record.fields['Condition Name']] = record.id;
-   // });
+   conditionViewRecords.forEach(record => {
+      mapConditionNames[record.fields['Condition Name']] = record.id;
+   });
 
    if (dailyViewRecords.length > 0){
       // ================= Get the max number of days since last tongue(=7 days) from the PARAMETER_TABLE =================
@@ -452,14 +452,13 @@ const getPoints = async(req, res) => {
          const pointsLog1 = {
             'Link to Diagnostic ID': dailyData[0]['Link to Diagnostic_ID'],
             "Tongue Top 4 conditions": String(task1_top4),
-            "Recommendation - Top 1 Condition": [top2Entries[0][0]],
-            "Recommendation - Top 2": [top2Entries[1][0]],
+            "Recommendation - Top 1 Condition": [mapConditionNames[top2Entries[0][0]]],
+            "Recommendation - Top 2": [mapConditionNames[top2Entries[1][0]]],
             ...newTotalPoints
          };
 
-         // console.log(pointsLog, 'pointLog');
          console.log(top2Entries, 'Recommendation');
-         createPointsLog(gutify_base, 'Points from past Daily Trackers for Alogo #3', JSON.parse(JSON.stringify(pointsLog)));
+         createPointsLog(gutify_base, 'Points from past Daily Trackers for Alogo #3', JSON.parse(JSON.stringify(pointsLog1)));
 
          return res.status(200).json(JSON.stringify(pointsLog1));
       } 

@@ -4,13 +4,6 @@ const getDataByTableName = async(base, table_name) => {}
 const getDataByViewName = async(base, table_name, view_name) => {
    let allRecords = [];
    try {
-      // await base(table_name)
-      //    .select({view: view_name})
-      //    .eachPage(async(records, fetchNextPage) => {
-      //       allRecords.push(...records);
-      //       fetchNextPage();
-      //    });
-      // return allRecords;
       allRecords = await base(table_name).select({view: view_name}).all();
       return allRecords;
    } catch (err) {
@@ -23,17 +16,6 @@ const getDataByViewName = async(base, table_name, view_name) => {
 const getSortedDataByViewName = async(base, table_name, view_name, fields, sort) => {
    let allRecords = [];
    try {
-      // await base(table_name)
-      //    .select({
-      //       view: view_name, 
-      //       fields: fields,
-      //       sort: sort
-      //    })
-      //    .eachPage(async(records, fetchNextPage) => {
-      //       allRecords.push(...records);
-      //       fetchNextPage();
-      //    });
-      // return allRecords;
       allRecords = await base(table_name).select({fields: fields, view: view_name}).all();
       return allRecords;
    } catch (err) {
@@ -46,13 +28,6 @@ const getSortedDataByViewName = async(base, table_name, view_name, fields, sort)
 const getDataByViewFields = async(base, table_name, view_name, fields) => {
    let allRecords = [];
    try {
-      // await base(table_name)
-      //    .select({view: view_name, fields: fields})
-      //    .eachPage((records, fetchNextPage) => {
-      //       allRecords.push(...records);
-      //       fetchNextPage();
-      //    });
-      // return allRecords;
       allRecords = await base(table_name).select({fields: fields, view: view_name}).all();
       return allRecords;
    } catch (err) {
@@ -65,24 +40,7 @@ const getDataByViewFields = async(base, table_name, view_name, fields) => {
 const getFilteredData = async(base, table_name, view_name, fields, sort, customerId) => {
    let allRecords = [];
    try {
-      // await base(table_name)
-      //    .select({
-      //       view: view_name, 
-      //       fields: fields, 
-      //       sort: sort,
-      //    })
-      //    .eachPage((records, fetchNextPage) => {
-      //       records.forEach(function (record) {
-      //          if (record.get('Link to Diagnostic_ID') == customerId) {
-      //             console.log(record, 'record');
-      //             allRecords.push(record);
-      //          }
-      //       });
-      //       fetchNextPage();
-      //    });
-      // return allRecords;
       allRecords = await base(table_name).select({fields: fields,sort: sort, filterByFormula: `SEARCH('${customerId}', {Link to Diagnostic_ID})`}).all();
-      // console.log(allRecords, 'allrecords')
       return allRecords;
    } catch (err) {
       console.error(err);

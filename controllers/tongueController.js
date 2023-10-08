@@ -123,7 +123,6 @@ const getTop4TongueConditions = async() => {
       .slice(0,4)
       .map(([key, value]) => `${key}:${value}`)
       .join(', ')
-   // console.log(result, 'result');
    return result;
    
 }
