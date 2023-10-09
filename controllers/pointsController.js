@@ -49,130 +49,6 @@ const DAILYTRACKER_SORT = [
    }
 ];
 
-const MIGRAINEPOINTS = {
-   "right":{
-      "description":"Right pain location points",
-      "condition": "QD",
-      "points": 1,
-      "total": 0
-   },
-   "left":{
-      "description":"Left pain location points",
-      "condition": "BS",
-      "points": 1,
-      "total": 0
-   },
-   "top":{
-      "description":"Top pain location points",
-      "condition": "LQS",
-      "points": 1,
-      "total": 0
-   },
-   "temple":{
-      "description":"Temple pain location points",
-      "condition": "LQS",
-      "points": 1,
-      "total": 0
-   },
-   "dizzy":{
-      "description":"Dizzy pain location points",
-      "condition": "YinDeficiency",
-      "points": 1,
-      "total": 0
-   },
-   "foggy":{
-      "description":"Foggy pain location points",
-      "condition": "Dampness",
-      "points": 1,
-      "total": 0
-   },
-   "behind my head":{
-      "description":"Behind pain location points",
-      "condition": "KD",
-      "points": 1,
-      "total": 0
-   },
-   "eyes":{
-      "description":"Eyes pain location points",
-      "condition": "LYD",
-      "points": 2,
-      "total": 0
-   },
-   "eyebrows":{
-      "description":"Eyebrows pain location points",
-      "condition": "LQS",
-      "points": 1,
-      "total": 0
-   },
-   "forehead":{
-      "description":"Forehead pain location points",
-      "condition": "SD",
-      "points": 1,
-      "total": 0
-   },
-   "ears":{
-      "description":"Ears pain location points",
-      "condition": "KD",
-      "points": 1,
-      "total": 0
-   }
-};
-
-const BowelPoints = {
-   "None": {
-      "condition" : "YinDeficiency",
-      "points": 2,
-      "total": 0
-   },
-   "Type 1": {
-      "condition" : "YinDeficiency",
-      "points": 1,
-      "total": 0
-   },
-   "Type 2": {
-      "condition" : "YinDeficiency",
-      "points": 0.5,
-      "total": 0
-   },
-   "Type 3": {
-      "condition" : "YinDeficiency",
-      "points": 0.25,
-      "total": 0
-   },
-   "Type 4": {
-      "condition" : "-",
-      "points": 0,
-      "total": 0
-   },
-   "Type 5": {
-      "condition" : "Dampness",
-      "points": 0.25,
-      "total": 0
-   },
-   "Type 6": {
-      "condition" : "Dampness",
-      "points": 1,
-      "total": 0
-   },
-   "Type 7": {
-      "condition" : "Dampness",
-      "points": 2,
-      "total": 0
-   }
-}
-
-const TotalPoints = {
-   "QD": 0,
-   "BS": 0,
-   "LQS": 0,
-   "YinDeficiency": 0,
-   "Dampness": 0,
-   "KD": 0,
-   "LYD": 0,
-   "SD": 0,
-   "LF": 0,
-}
-
 var mapParameters = {};                // Object for storing all parameters from the PARAMETER_TABLE.
 var mapConditionNames = {};            // Object for storing all Conditions from the CONDITION_TABLE.
 var MinNumberOfRecentDays = 3;         // initial value of "Min number of recent days that should have been tracked consecutively"
@@ -253,6 +129,131 @@ const makeNotication = (input) => {
 }
 
 const getPoints = async(req, res) => {
+
+   const MIGRAINEPOINTS = {
+      "right":{
+         "description":"Right pain location points",
+         "condition": "QD",
+         "points": 1,
+         "total": 0
+      },
+      "left":{
+         "description":"Left pain location points",
+         "condition": "BS",
+         "points": 1,
+         "total": 0
+      },
+      "top":{
+         "description":"Top pain location points",
+         "condition": "LQS",
+         "points": 1,
+         "total": 0
+      },
+      "temple":{
+         "description":"Temple pain location points",
+         "condition": "LQS",
+         "points": 1,
+         "total": 0
+      },
+      "dizzy":{
+         "description":"Dizzy pain location points",
+         "condition": "YinDeficiency",
+         "points": 1,
+         "total": 0
+      },
+      "foggy":{
+         "description":"Foggy pain location points",
+         "condition": "Dampness",
+         "points": 1,
+         "total": 0
+      },
+      "behind my head":{
+         "description":"Behind pain location points",
+         "condition": "KD",
+         "points": 1,
+         "total": 0
+      },
+      "eyes":{
+         "description":"Eyes pain location points",
+         "condition": "LYD",
+         "points": 2,
+         "total": 0
+      },
+      "eyebrows":{
+         "description":"Eyebrows pain location points",
+         "condition": "LQS",
+         "points": 1,
+         "total": 0
+      },
+      "forehead":{
+         "description":"Forehead pain location points",
+         "condition": "SD",
+         "points": 1,
+         "total": 0
+      },
+      "ears":{
+         "description":"Ears pain location points",
+         "condition": "KD",
+         "points": 1,
+         "total": 0
+      }
+   };
+   
+   const BowelPoints = {
+      "None": {
+         "condition" : "YinDeficiency",
+         "points": 2,
+         "total": 0
+      },
+      "Type 1": {
+         "condition" : "YinDeficiency",
+         "points": 1,
+         "total": 0
+      },
+      "Type 2": {
+         "condition" : "YinDeficiency",
+         "points": 0.5,
+         "total": 0
+      },
+      "Type 3": {
+         "condition" : "YinDeficiency",
+         "points": 0.25,
+         "total": 0
+      },
+      "Type 4": {
+         "condition" : "-",
+         "points": 0,
+         "total": 0
+      },
+      "Type 5": {
+         "condition" : "Dampness",
+         "points": 0.25,
+         "total": 0
+      },
+      "Type 6": {
+         "condition" : "Dampness",
+         "points": 1,
+         "total": 0
+      },
+      "Type 7": {
+         "condition" : "Dampness",
+         "points": 2,
+         "total": 0
+      }
+   }
+   
+   const TotalPoints = {
+      "QD": 0,
+      "BS": 0,
+      "LQS": 0,
+      "YinDeficiency": 0,
+      "Dampness": 0,
+      "KD": 0,
+      "LYD": 0,
+      "SD": 0,
+      "LF": 0,
+   }
+   
    const {DiagnosticID} = req.query;
    console.log(DiagnosticID, 'DiagnosticID');
    // ==========================get top 4 tongue conditions================================
