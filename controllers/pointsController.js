@@ -130,7 +130,7 @@ const makeNotication = (input) => {
 
 const getPoints = async(req, res) => {
 
-   const MIGRAINEPOINTS = {
+   let MIGRAINEPOINTS = {
       "right":{
          "description":"Right pain location points",
          "condition": "QD",
@@ -199,7 +199,7 @@ const getPoints = async(req, res) => {
       }
    };
    
-   const BowelPoints = {
+   let BowelPoints = {
       "None": {
          "condition" : "YinDeficiency",
          "points": 2,
@@ -242,7 +242,7 @@ const getPoints = async(req, res) => {
       }
    }
    
-   const TotalPoints = {
+   let TotalPoints = {
       "QD": 0,
       "BS": 0,
       "LQS": 0,
@@ -251,7 +251,7 @@ const getPoints = async(req, res) => {
       "KD": 0,
       "LYD": 0,
       "SD": 0,
-      "LF": 0,
+      "LF": 0
    }
 
    const {DiagnosticID} = req.query;
