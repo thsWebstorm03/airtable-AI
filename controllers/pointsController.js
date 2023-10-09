@@ -409,7 +409,7 @@ const getPoints = async(req, res) => {
          
          // ============== Bowel movements from the last 7 daily trackers ======================
          filtered_data.forEach(item => {
-            if(Object.keys(item).indexOf("Bowel movement") >-1){
+            if(item["Bowel movement"] !=""){
                item["Bowel movement"].split(",").forEach(data =>{
                   if(data.includes("None") || data.includes("Type")){
                      BowelPoints[data.trim()].total +=BowelPoints[data.trim()].points
