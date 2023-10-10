@@ -350,62 +350,73 @@ const getPoints = async(req, res) => {
 
          const filtered_data = dailyData.filter(data => moment(data['Calendar date']).isSameOrAfter(moment(lastDayOfConsider)));
          const firstIndexOfMenstruation = findLastIndex(filtered_data);
-         console.log(filtered_data[firstIndexOfMenstruation]["Calendar date"], 'first Menstruation date');
+         if (firstIndexOfMenstruation > -1){
 
-         // ============== Look at 3~5 days of trackers before the first Menstruation ======================
-         const beforeFromDate_migraine = moment(filtered_data[firstIndexOfMenstruation]["Calendar date"]).subtract(MinPMSDays, 'days');
-         const beforeToDate_migraine = moment(filtered_data[firstIndexOfMenstruation]["Calendar date"]).subtract(MaxPMSDays, 'days');
-         console.log(beforeFromDate_migraine.format('YYYY-MM-DD'), beforeToDate_migraine.format('YYYY-MM-DD'), 'before-to')
+            console.log(filtered_data[firstIndexOfMenstruation]["Calendar date"], 'first Menstruation date');
 
-         const betweenData1_migraine = filtered_data.filter(item => moment(item['Calendar date']).isSameOrBefore(beforeToDate_migraine) && moment(item['Calendar date']).isSameOrAfter(beforeFromDate_migraine));
-         console.log(betweenData1_migraine, 'betweenData1_migraine')
-         const sum_PMS = betweenData1_migraine.reduce((total, item) => {
-            if (item["What was your level of pain today?"] != "I felt sharp and free!"){
-               total += PMSMigrainePoints;
-            }
-            return total;
-         }, 0);
-         console.log(sum_PMS, 'sum_PMS')
+            // ============== Look at 3~5 days of trackers before the first Menstruation ======================
+            const beforeFromDate_migraine = moment(filtered_data[firstIndexOfMenstruation]["Calendar date"]).subtract(MinPMSDays, 'days');
+            const beforeToDate_migraine = moment(filtered_data[firstIndexOfMenstruation]["Calendar date"]).subtract(MaxPMSDays, 'days');
+            console.log(beforeFromDate_migraine.format('YYYY-MM-DD'), beforeToDate_migraine.format('YYYY-MM-DD'), 'before-to')
 
-         TotalPoints["LF"] += sum_PMS;
+            const betweenData1_migraine = filtered_data.filter(item => moment(item['Calendar date']).isSameOrBefore(beforeToDate_migraine) && moment(item['Calendar date']).isSameOrAfter(beforeFromDate_migraine));
+            console.log(betweenData1_migraine, 'betweenData1_migraine')
+            const sum_PMS = betweenData1_migraine.reduce((total, item) => {
+               if (item["What was your level of pain today?"] != "I felt sharp and free!"){
+                  total += PMSMigrainePoints;
+               }
+               return total;
+            }, 0);
+            console.log(sum_PMS, 'sum_PMS')
 
-         // ============== Look at 12~16 days of trackers before the first Menstruation ======================
-         const beforeFromDate_ovulation = moment(filtered_data[firstIndexOfMenstruation]["Calendar date"]).subtract(MinOvulationDays, 'days');
-         const beforeToDate_ovulation = moment(filtered_data[firstIndexOfMenstruation]["Calendar date"]).subtract(MaxOvulationDays, 'days');
-         console.log(beforeFromDate_ovulation.format('YYYY-MM-DD'), beforeToDate_ovulation.format('YYYY-MM-DD'), 'before-to')
+            TotalPoints["LF"] += sum_PMS;
 
-         const betweenData1_ovulation = filtered_data.filter(item => moment(item['Calendar date']).isSameOrBefore(beforeFromDate_ovulation) && moment(item['Calendar date']).isSameOrAfter(beforeToDate_ovulation));
-         console.log(betweenData1_ovulation, 'betweenData1_ovulation')
-         const sum_ovulation = betweenData1_ovulation.reduce((total, item) => {
-            if (item["What was your level of pain today?"] != "I felt sharp and free!"){
-               total += OvulationMigrainePoints;
-            }
-            return total;
-         }, 0);
-         console.log(sum_ovulation, 'sum_ovulation')
+            // ============== Look at 12~16 days of trackers before the first Menstruation ======================
+            const beforeFromDate_ovulation = moment(filtered_data[firstIndexOfMenstruation]["Calendar date"]).subtract(MinOvulationDays, 'days');
+            const beforeToDate_ovulation = moment(filtered_data[firstIndexOfMenstruation]["Calendar date"]).subtract(MaxOvulationDays, 'days');
+            console.log(beforeFromDate_ovulation.format('YYYY-MM-DD'), beforeToDate_ovulation.format('YYYY-MM-DD'), 'before-to')
 
-         TotalPoints["KD"] += sum_ovulation;
+            const betweenData1_ovulation = filtered_data.filter(item => moment(item['Calendar date']).isSameOrBefore(beforeFromDate_ovulation) && moment(item['Calendar date']).isSameOrAfter(beforeToDate_ovulation));
+            console.log(betweenData1_ovulation, 'betweenData1_ovulation')
+            const sum_ovulation = betweenData1_ovulation.reduce((total, item) => {
+               if (item["What was your level of pain today?"] != "I felt sharp and free!"){
+                  total += OvulationMigrainePoints;
+               }
+               return total;
+            }, 0);
+            console.log(sum_ovulation, 'sum_ovulation')
+
+            TotalPoints["KD"] += sum_ovulation;
+         } else{
+            console.log('No Menstruation');
+         }
 
          // =================Calculate the first Menstruation date=======================
          const lastIndexOfMenstruation = filtered_data.findIndex(item => item['Menstruation'] == 'Yes - I am on my period' || item['Menstruation'] == 'Yes - spotting only');
-         console.log(filtered_data[lastIndexOfMenstruation]["Calendar date"], 'last Menstruation date');
+         if (lastIndexOfMenstruation > -1){
 
-         // ============== Look at 1~5 days of trackers after the last Menstruation ======================
-         const afterFromDate_cycle = moment(filtered_data[lastIndexOfMenstruation]["Calendar date"]).add(MinStartOfCycleDays, 'days');
-         const afterToDate_cycle = moment(filtered_data[lastIndexOfMenstruation]["Calendar date"]).add(MaxStartOfCycleDays, 'days');
-         console.log(afterFromDate_cycle.format('YYYY-MM-DD'), afterToDate_cycle.format('YYYY-MM-DD'), 'after-to')
+         }
+            console.log(filtered_data[lastIndexOfMenstruation]["Calendar date"], 'last Menstruation date');
 
-         const betweenData1_cycle = filtered_data.filter(item => moment(item['Calendar date']).isSameOrBefore(afterToDate_cycle) && moment(item['Calendar date']).isSameOrAfter(afterFromDate_cycle));
-         console.log(betweenData1_cycle, 'betweenData1_ovulation')
-         const sum_cycle = betweenData1_cycle.reduce((total, item) => {
-            if (item["What was your level of pain today?"] != "I felt sharp and free!"){
-               total += AfterMigrainePoints;
-            }
-            return total;
-         }, 0);
-         console.log(sum_cycle, 'sum_cycle')
+            // ============== Look at 1~5 days of trackers after the last Menstruation ======================
+            const afterFromDate_cycle = moment(filtered_data[lastIndexOfMenstruation]["Calendar date"]).add(MinStartOfCycleDays, 'days');
+            const afterToDate_cycle = moment(filtered_data[lastIndexOfMenstruation]["Calendar date"]).add(MaxStartOfCycleDays, 'days');
+            console.log(afterFromDate_cycle.format('YYYY-MM-DD'), afterToDate_cycle.format('YYYY-MM-DD'), 'after-to')
 
-         TotalPoints["YinDeficiency"] += sum_cycle;
+            const betweenData1_cycle = filtered_data.filter(item => moment(item['Calendar date']).isSameOrBefore(afterToDate_cycle) && moment(item['Calendar date']).isSameOrAfter(afterFromDate_cycle));
+            console.log(betweenData1_cycle, 'betweenData1_ovulation')
+            const sum_cycle = betweenData1_cycle.reduce((total, item) => {
+               if (item["What was your level of pain today?"] != "I felt sharp and free!"){
+                  total += AfterMigrainePoints;
+               }
+               return total;
+            }, 0);
+            console.log(sum_cycle, 'sum_cycle');
+            TotalPoints["YinDeficiency"] += sum_cycle;
+         } else{
+            console.log('No Menstruation');
+         }
+
          
          // ============== Bowel movements from the last 7 daily trackers ======================
          filtered_data.forEach(item => {
