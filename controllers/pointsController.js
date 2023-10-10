@@ -429,7 +429,7 @@ const getPoints = async(req, res) => {
 
          console.log(BowelPoints, 'BowelPoints');
          Object.keys(BowelPoints).forEach(key => {
-            if(key != 'Type 4') TotalPoints[BowelPoints[key]['condition']] += BowelPoints[key]['points'];
+            if(key != 'Type 4') TotalPoints[BowelPoints[key]['condition']] += BowelPoints[key]['total'];
          })
 
 
