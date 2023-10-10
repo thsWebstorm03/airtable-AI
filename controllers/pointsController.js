@@ -394,8 +394,6 @@ const getPoints = async(req, res) => {
          // =================Calculate the first Menstruation date=======================
          const lastIndexOfMenstruation = filtered_data.findIndex(item => item['Menstruation'] == 'Yes - I am on my period' || item['Menstruation'] == 'Yes - spotting only');
          if (lastIndexOfMenstruation > -1){
-
-         }
             console.log(filtered_data[lastIndexOfMenstruation]["Calendar date"], 'last Menstruation date');
 
             // ============== Look at 1~5 days of trackers after the last Menstruation ======================
