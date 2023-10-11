@@ -254,7 +254,8 @@ const getPoints = async(req, res) => {
       "LF": 0
    }
 
-   const {DiagnosticID} = req.query;
+   var {DiagnosticID} = req.query;
+   DiagnosticID = DiagnosticID.replace(/^GY/,"");
    console.log(DiagnosticID, 'DiagnosticID');
    // ==========================get top 4 tongue conditions================================
    const task1_top4 = await getTop4TongueConditions();
