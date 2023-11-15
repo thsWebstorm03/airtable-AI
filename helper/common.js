@@ -49,6 +49,35 @@ const getFilteredData = async(base, table_name, view_name, fields, sort, custome
    }
 }
 
+// ============================ Get the table data by filtering =====================================
+const getViewDataByID = async(base, table_name, view_name, fields, key, value) => {
+   let allRecords = [];
+   try {
+      allRecords = await base(table_name).select({view: view_name, fields: fields, filterByFormula: `SEARCH('${value}', {${key}})`}).all();
+      console.log(allRecords.length, 'allRecords.length');
+      return allRecords;
+   } catch (err) {
+      console.error(err);
+      throw err;
+   }
+}
+
+// ============================ Get the table data by filtering =====================================
+const getRecordByIDs = async(base, table_name, recIDs) => {
+   const allRecords = [];
+
+    for (const id of recIDs) {
+        try {
+            const record = await base(table_name).find(id);
+            allRecords.push(record.fields);
+        } catch (error) {
+            console.error(`Error fetching record with ID ${id}:`, error);
+        }
+    }
+
+    return allRecords;
+}
+
 // ============== Create a new notification into the table "Notifications", Gutify DB ================
 const createNotification = async(base, table_name, notification) => {
    await base(table_name).create([
@@ -67,7 +96,7 @@ const createNotification = async(base, table_name, notification) => {
 }
 
 // ============== Create a new notification into the table "Notifications", Gutify DB ================
-const createPointsLog = async(base, table_name, pointsLog) => {
+const createLog = async(base, table_name, pointsLog) => {
    await base(table_name).create([
       {
          fields: pointsLog
@@ -166,9 +195,11 @@ module.exports = {
    getSortedDataByViewName,
    getDataByViewFields,
    getFilteredData,
+   getViewDataByID,
+   getRecordByIDs,
 
    createNotification,
-   createPointsLog,
+   createLog,
    getTop4FromString,
    getTop4ByPriority,
    sortObj,

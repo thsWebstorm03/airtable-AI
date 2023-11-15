@@ -9,7 +9,7 @@ const {
    getDataByViewFields,
    createNotification,
    getSortedDataByViewName,
-   createPointsLog,
+   createLog,
    getFilteredData
 } = require('../helper/common');
 
@@ -469,7 +469,7 @@ const getPoints = async(req, res) => {
          };
 
          console.log(top2Entries, 'Recommendation');
-         createPointsLog(gutify_base, 'Points from past Daily Trackers for Alogo #3', JSON.parse(JSON.stringify(pointsLog)));
+         createLog(gutify_base, 'Points from past Daily Trackers for Alogo #3', JSON.parse(JSON.stringify(pointsLog)));
 
          return res.json(pointsLog1);
       } 
