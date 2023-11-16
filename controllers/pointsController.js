@@ -3,7 +3,7 @@ dotenv.config();
 
 const Airtable = require('airtable');
 const moment = require('moment');
-const {TOKEN, GUTIFYBASE_ID} = require('../config.json');
+const {TOKEN, GUTIFYBASE_ID} = require('../config_new.json');
 Airtable.configure({apiKey: TOKEN});
 const {
    getDataByViewFields,
@@ -13,7 +13,8 @@ const {
    getFilteredData
 } = require('../helper/common');
 
-const {getTop4TongueConditions} = require('./tongueController')
+const {getTop4TongueConditions} = require('./tongueController');
+const {calculate} = require('./newAlgoController');
 
 const gutify_base = Airtable.base(GUTIFYBASE_ID);
 
@@ -255,13 +256,21 @@ const getPoints = async(req, res) => {
    }
 
    var {DiagnosticID} = req.query;
-   DiagnosticID = DiagnosticID.trim().replace(/^GY/,"");
-   console.log(DiagnosticID, 'DiagnosticID');
+   // DiagnosticID = DiagnosticID.trim().replace(/^GY/,"");
+   // console.log(DiagnosticID, 'DiagnosticID');
+
+   // var {CustomerID} = req.query;
+
+   // run new algorithm
+   const newAlgo_result = await calculate(DiagnosticID);
+   return res.json(true);
+
    // ==========================get top 4 tongue conditions================================
    const task1_top4 = await getTop4TongueConditions();
+
    // =================== Get records using getDataByViewFields function ================================================
    const parameterViewRecords = await getDataByViewFields(gutify_base, PARAMETER_TABLE, PARAMETER_VIEW, PARAMETER_FIELDS);
-   const dailyViewRecords = await getFilteredData(gutify_base, DAILYTRACKER_TABLE, DAILYTRACKER_VIEW, DAILYTRACKER_FIELDS, DAILYTRACKER_SORT, DiagnosticID);
+   const dailyViewRecords = await getFilteredData(gutify_base, DAILYTRACKER_TABLE, DAILYTRACKER_VIEW, DAILYTRACKER_FIELDS, DAILYTRACKER_SORT, CustomerID);
    const conditionViewRecords = await getDataByViewFields(gutify_base, CONDITIONS_TABLE, CONDITIONS_VIEW, CONDITIONS_FIELDS);
 
    conditionViewRecords.forEach(record => {
@@ -314,6 +323,8 @@ const getPoints = async(req, res) => {
 
          let new_notification = makeNotication(dailyData[0]);
          createNotification(gutify_base, NOTIFICATION_TABLE, new_notification);
+         // run new algorithm
+         const newAlgo_result = await calculate(CustomerID);
          return res.status(200).json(new_notification);
       } 
 
@@ -469,7 +480,10 @@ const getPoints = async(req, res) => {
          };
 
          console.log(top2Entries, 'Recommendation');
-         createLog(gutify_base, 'Points from past Daily Trackers for Alogo #3', JSON.parse(JSON.stringify(pointsLog)));
+         // createLog(gutify_base, 'Points from past Daily Trackers for Alogo #3', JSON.parse(JSON.stringify(pointsLog)));
+
+         // run new algorithm
+         const newAlgo_result = await calculate(CustomerID);
 
          return res.json(pointsLog1);
       } 

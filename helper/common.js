@@ -37,10 +37,10 @@ const getDataByViewFields = async(base, table_name, view_name, fields) => {
 }
 
 // ============================ Get the table data by filtering =====================================
-const getFilteredData = async(base, table_name, view_name, fields, sort, customerId) => {
+const getFilteredData = async(base, table_name, view_name, fields, sort, DiagnosticID) => {
    let allRecords = [];
    try {
-      allRecords = await base(table_name).select({fields: fields,sort: sort, filterByFormula: `SEARCH('${customerId}', {Link to Diagnostic_ID})`}).all();
+      allRecords = await base(table_name).select({fields: fields,sort: sort, filterByFormula: `SEARCH('${DiagnosticID}', {Diagnostic_ID})`}).all();
       console.log(allRecords.length, 'allRecords.length');
       return allRecords;
    } catch (err) {
